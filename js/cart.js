@@ -66,7 +66,7 @@ $(() => {
             arr.forEach(e => {
                 if (e.pID === id) {   //如果有对应的id，就把数量叠加
                     totalCount += e.number;
-                     totalMoney += e.price * e.number;   //把价格叠加
+                    totalMoney += e.price * e.number;   //把价格叠加
                 };
             });
         });
@@ -79,13 +79,13 @@ $(() => {
 
 
     // 获取全选框，注册点击事件
-    $('.pick-all').on('click',function(){
-         // 获取选中的状态
-         let status = $(this).prop('checked');
+    $('.pick-all').on('click', function () {
+        // 获取选中的状态
+        let status = $(this).prop('checked');
         //  再把每个单选框都设置成选中中状态
-         $('.item-ck').prop('checked',status);
+        $('.item-ck').prop('checked', status);
         //  因为前后有两个全选框按钮，需要把两个状态都设置成一样
-         $('.pick-all').prop('checked',status);
+        $('.pick-all').prop('checked', status);
 
         //  价格重新计算
         computedTotal();
@@ -94,20 +94,90 @@ $(() => {
 
 
     // 获取单选框按钮，因为结构是动态生成的，最好使用事件委托来做，注册点击事件
-    $('.item-list').on('click','.item-ck',function(){
+    $('.item-list').on('click', '.item-ck', function () {
         // 获取单选框全选中的状态，单选框选中的数量input：checked === 总数量
         let isAll = $('.item-ck').length === $('.item-ck:checked').length
         //console.log(isAll);
-        $('.pick-all').prop('checked',isAll);
+        $('.pick-all').prop('checked', isAll);
         computedTotal();
-    
+
     });
-       
-    
 
 
 
 
-    
+
+    // 获取增加按钮,利用事件委托，注册点击事件
+    $('.item-list').on('click', '.add', function () {
+        // console.log(12)
+        // console.log(id);
+        // 获取当前每列产品的数量
+        let oldVal = parseInt($(this).siblings('input').val());
+        // 点击的该产品数量增加
+        oldVal++;
+        // console.log(oldVal)
+        // 如果数量大于1时，把减少的禁止样式去掉
+        if (oldVal > 1) {
+            $(this).siblings('.reduce').removeClass('disabled')
+        }
+
+        // 还要数量赋值回去
+        $(this).siblings('input').val(oldVal);
+        // 获取id
+        let id = parseInt($(this).parents('.item').attr('data-id'))
+        let obj = arr.find(e => {
+            return e.pID === id
+        });
+
+        obj.number = oldVal;
+
+        // 计算小计栏目的总价
+        $(this).parents('.item').find('.computed').text(obj.number * obj.price);
+
+        // 下面的总价和总数量重新计算
+        computedTotal();
+
+
+    });
+
+
+
+    // 获取减少按钮，利用事件委托，注册点击事件
+    $('.item-list').on('click', '.reduce', function () {
+        // console.log(234)
+        // 获取当前的数量
+        let oldVal = parseInt($(this).siblings('.number').val());
+        // 数量等于1时，禁止继续往下点
+        if (oldVal === 1) {
+            return;
+        };
+        // 数量减少
+        oldVal--;
+        // 数量等于1时，添加禁止样式
+        if (oldVal === 1) {
+            $(this).addClass('disabled');
+
+        };
+
+        // 把数量重新赋值
+        $(this).siblings('input').val(oldVal);
+
+        // 获取id
+        let id = parseInt($(this).parents('.item').attr('data-id'));
+        // 用find来查找，找到相对的ID
+        let obj = arr.find(e=>{
+            return e.pID === id;
+        });
+        // console.log(obj)
+        obj.number = oldVal;
+
+        // 重新计算小计的价格
+        $(this).parents('.item').find('.computed').text(obj.number * obj.price);
+
+        // 下面的总价和总数量重新计算
+        computedTotal();
+
+     })
+
 
 });
