@@ -47,12 +47,57 @@ $(() => {
     });
 
     $('.preview-wrap').on('mouseout',e=>{
-        console.log(123)
+        // console.log(123)
         // $('.mask').css('display','none');
         // $('.big').hide();
 
     });
+
+
+
+
+
+
+    // 获取增加按钮，注册点击事件
+        $('.add').on('click',function(){
+            // 获取当前的数量
+            let old = parseInt($('.choose-number').val()); 
+            //console.log(old)  //返回字符串
+            // 数量增加
+            old++;
+            // 判断如果数量大于1时，把减少的禁止样式去掉
+            if(old > 1){
+                $('.reduce').removeClass('disabled');
+            }
+
+            // 在重新赋值给choose-number
+            $('.choose-number').val(old);
+        });
         
+
+
+
+        // 获取减少按钮，注册点击事件
+        $('.reduce').on('click',e=>{
+            // 获取当前的数量
+            let current = parseInt($('.choose-number').val()); 
+            // console.log(current);
+            // 判断当数量到1时，不能继续点击下去
+            if(current ===1 ){
+                return;
+            };
+
+            // 数量减少
+            current--;
+            // 当数量减少到1的时候，添加禁止样式
+            if(current === 1){
+                $('.reduce').addClass('disabled');
+            };
+
+            // 重新赋值给choose-number
+            $('.choose-number').val(current);
+
+        });
 
 
 
