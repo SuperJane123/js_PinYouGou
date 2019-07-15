@@ -57,21 +57,25 @@ $(() => {
 
 
 
-
+    let count = $('.choose-number');
     // 获取增加按钮，注册点击事件
     $('.add').on('click', function () {
         // 获取当前的数量
-        let old = parseInt($('.choose-number').val());
+        let old = parseInt(count.val());
+        console.log(old)
+
         //console.log(old)  //返回字符串
         // 数量增加
         old++;
+        // console.log(old)
         // 判断如果数量大于1时，把减少的禁止样式去掉
         if (old > 1) {
             $('.reduce').removeClass('disabled');
         }
 
         // 在重新赋值给choose-number
-        $('.choose-number').val(old);
+        let res = count.val(old);
+        // console.log(res)
     });
 
 
@@ -102,12 +106,13 @@ $(() => {
     /*现在要做的是把需要的数据储存到本地数据里面，
 数据是在点击加入购物车的时候就要储存的
 储存的数据有：图片，名称，单价，数量*/
-    // 获取数量
-    let number = parseInt($('.choose-number').val());
-
 
     // 获取加入购物车按钮，注册点击事件
     $('.addshopcar').on('click', e => {
+        // 获取数量
+        let number = parseInt(count.val());
+        console.log(number);
+
         // 首先先读取本地数据，实现新旧数据叠加
         let jsonStr = localStorage.getItem('shopCartData');
         let arr;
@@ -140,13 +145,14 @@ $(() => {
 
             };
             arr.push(goods);
+            console.log(number);
         };
 
         // 再把数据储存到locationstroage里面
         jsonStr = JSON.stringify(arr);
         localStorage.setItem('shopCartData', jsonStr);
-        
-        // 跳转到购物车的页面
+
+        // // 跳转到购物车的页面
         location.href = 'cart.html'
 
     });

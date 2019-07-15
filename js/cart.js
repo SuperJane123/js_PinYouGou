@@ -99,6 +99,7 @@ $(() => {
         let isAll = $('.item-ck').length === $('.item-ck:checked').length
         //console.log(isAll);
         $('.pick-all').prop('checked', isAll);
+
         computedTotal();
 
     });
@@ -130,6 +131,8 @@ $(() => {
         });
 
         obj.number = oldVal;
+        jsonStr = JSON.stringify(arr);
+        localStorage.setItem('shopCartData',jsonStr);
 
         // 计算小计栏目的总价
         $(this).parents('.item').find('.computed').text(obj.number * obj.price);
@@ -170,6 +173,9 @@ $(() => {
         });
         // console.log(obj)
         obj.number = oldVal;
+        jsonStr = JSON.stringify(arr);
+        localStorage.setItem('shopCartData',jsonStr);
+
 
         // 重新计算小计的价格
         $(this).parents('.item').find('.computed').text(obj.number * obj.price);
