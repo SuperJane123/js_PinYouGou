@@ -46,11 +46,12 @@ $(() => {
             $('.cart-header').show();
             // 把结算栏显示出来
             $('.total-of').show();
-        });
+        })
         // 把数据添加到购物车页面
         $('.item-list').html(html);
 
-    };
+    }
+
 
     // 计算总和和总数量
     function computedTotal() {
