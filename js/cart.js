@@ -66,7 +66,7 @@ $(() => {
             arr.forEach(e => {
                 if (e.pID === id) {   //如果有对应的id，就把数量叠加
                     totalCount += e.number;
-                    // totalMoney += e.price * e.number;   把价格叠加
+                     totalMoney += e.price * e.number;   //把价格叠加
                 };
             });
         });
@@ -76,6 +76,35 @@ $(() => {
     }
 
     computedTotal();
+
+
+    // 获取全选框，注册点击事件
+    $('.pick-all').on('click',function(){
+         // 获取选中的状态
+         let status = $(this).prop('checked');
+        //  再把每个单选框都设置成选中中状态
+         $('.item-ck').prop('checked',status);
+        //  因为前后有两个全选框按钮，需要把两个状态都设置成一样
+         $('.pick-all').prop('checked',status);
+
+        //  价格重新计算
+        computedTotal();
+
+    });
+
+
+    // 获取单选框按钮，因为结构是动态生成的，最好使用事件委托来做，注册点击事件
+    $('.item-list').on('click','.item-ck',function(){
+        // 获取单选框全选中的状态，单选框选中的数量input：checked === 总数量
+        let isAll = $('.item-ck').length === $('.item-ck:checked').length
+        //console.log(isAll);
+        $('.pick-all').prop('checked',isAll);
+        computedTotal();
+    
+    });
+       
+    
+
 
 
 
