@@ -64,13 +64,13 @@ $(() => {
 
             // 遍历数组，找到相对应的id
             arr.forEach(e => {
-                if (e.pID === id) {   //如果有对应的id，就把数量叠加
+                if (id === e.pID) {   //如果有对应的id，就把数量叠加
                     totalCount += e.number;
                     totalMoney += e.price * e.number;   //把价格叠加
                 };
             });
         });
-
+        // console.log(totalCount)
         $('.selected').text(totalCount);
         $('.total-money').text(totalMoney);
     }
@@ -165,7 +165,7 @@ $(() => {
         // 获取id
         let id = parseInt($(this).parents('.item').attr('data-id'));
         // 用find来查找，找到相对的ID
-        let obj = arr.find(e=>{
+        let obj = arr.find(e => {
             return e.pID === id;
         });
         // console.log(obj)
@@ -177,7 +177,46 @@ $(() => {
         // 下面的总价和总数量重新计算
         computedTotal();
 
-     })
+    });
+
+
+
+
+    //  获取删除元素，利用事件委托，注册点击事件
+    $('.item-list').on('click', '.item-del', function () {
+
+        // 先保存移除的这个this
+        let _this = this;
+        $("#dialog-confirm").dialog({
+            resizable: false,
+            height: 140,
+            modal: true,
+            buttons: {
+                "确认": function () {
+                    $(this).dialog("close");
+                    $(_this).parents('.item').remove();
+                    // 还要删除本地数据里面的信息
+                    let id = parseInt($(_this).parents('.item').attr('data-id'));
+                    let index = arr.findIndex(e => {
+                        return e.pID === id;
+                    });
+                    // console.log(index)
+                    arr.splice(index, 1);
+                    // 重新计算价格
+                    computedTotal();
+
+
+                    // 再把数据储存到localtroage里面
+                    let jsonStr = JSON.stringify(arr);
+                    localStorage.setItem('shopCartData', jsonStr);
+                },
+                "取消": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+    });
 
 
 });
